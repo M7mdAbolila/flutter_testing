@@ -9,7 +9,6 @@ import 'fetch_album_test.mocks.dart';
 @GenerateMocks([http.Client])
 void main() {
   group("Fetch Album Test", () {
-    
     test("returns an Album if the http call completes successfully", () async {
       MockClient mockClient = MockClient();
 
@@ -26,7 +25,15 @@ void main() {
         ),
       );
 
-      expect(await fetchAlbum(mockClient), isA<Album>());
+      expect(
+        await fetchAlbum(mockClient),
+        // Use the `isA` matcher to match a specific type
+        // Use the `having` method to check specific properties of the returned object
+        isA<Album>()
+            .having((album) => album.userId, "userId", equals(1))
+            .having((album) => album.id, "id", equals(1))
+            .having((album) => album.title, "title", equals("mocked title")),
+      );
     });
 
     test(
