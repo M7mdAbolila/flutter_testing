@@ -52,5 +52,26 @@ void main() {
         expect(fetchAlbum(mockClient), throwsException);
       },
     );
+
+    test("called get once", () {
+      MockClient mockClient = MockClient();
+
+      when(
+        mockClient.get(
+          Uri.parse('https://jsonplaceholder.typicode.com/albums/1'),
+        ),
+      ).thenAnswer(
+        (_) async => http.Response(
+          '{"userId": 1, "id": 1, "title": "mocked title"}',
+          200,
+        ),
+      );
+      fetchAlbum(mockClient);
+      verify(
+        mockClient.get(
+          Uri.parse('https://jsonplaceholder.typicode.com/albums/1'),
+        ),
+      ).called(1);
+    });
   });
 }
