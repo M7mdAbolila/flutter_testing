@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_testing/core/api/fetch_album.dart';
 import 'package:http/http.dart' as http;
@@ -9,9 +11,25 @@ import 'fetch_album_test.mocks.dart';
 @GenerateMocks([http.Client])
 void main() {
   group("Fetch Album Test", () {
-    test("returns an Album if the http call completes successfully", () async {
-      MockClient mockClient = MockClient();
+    late MockClient mockClient;
 
+    /// Use the `setUp` function to initialize shared resources before each test
+    setUp(() {
+      mockClient = MockClient();
+    });
+
+    /// Use the `tearDown` function to clean up resources after each test
+    tearDown(() {
+      // No resources to clean up in this case, but you could close streams or databases here
+      log("Test completed. Cleaning up resources");
+    });
+
+    /// Use the `tearDownAll` function to clean up resources after all tests in the group have run
+    tearDownAll(() {
+      // No resources to clean up in this case, but you could close streams or databases here
+      log("All tests in the Fetch Album Test group have completed.");
+    });
+    test("returns an Album if the http call completes successfully", () async {
       when(
         mockClient.get(
           Uri.parse('https://jsonplaceholder.typicode.com/albums/1'),
@@ -39,8 +57,6 @@ void main() {
     test(
       "throws an exception if the http call completes with an error",
       () async {
-        MockClient mockClient = MockClient();
-
         when(
           mockClient.get(
             Uri.parse('https://jsonplaceholder.typicode.com/albums/1'),
@@ -54,8 +70,6 @@ void main() {
     );
 
     test("called get once", () {
-      MockClient mockClient = MockClient();
-
       when(
         mockClient.get(
           Uri.parse('https://jsonplaceholder.typicode.com/albums/1'),
@@ -71,7 +85,9 @@ void main() {
         mockClient.get(
           Uri.parse('https://jsonplaceholder.typicode.com/albums/1'),
         ),
-      ).called(1);
+      )
+      // Use the `called` method to verify that the method was called a specific number of times
+      .called(1);
     });
   });
 }
