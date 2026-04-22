@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_testing/my_widget.dart';
 
 void main() {
-  group("MyWidget", () {
+  group("MyWidget test", () {
     testWidgets("MyWidget find title and message ", (
       WidgetTester tester,
     ) async {
@@ -40,5 +40,19 @@ void main() {
       final iconFinder = find.byWidget(icon);
       expect(iconFinder, findsOneWidget);
     });
+  });
+
+  testWidgets("Find appBar with title", (WidgetTester tester) async {
+    await tester.pumpWidget(const MyWidget(title: 'T', message: 'M'));
+
+    final appBarFinder = find.byKey(const Key('appBar'));
+    expect(appBarFinder, findsOneWidget);
+
+    final appBarHasTitle = find.descendant(
+      of: appBarFinder,
+      matching: find.text('T'),
+    );
+
+    expect(appBarHasTitle, findsOneWidget);
   });
 }
